@@ -15,9 +15,11 @@ define('SCPORDER_DIR', plugin_dir_path(__FILE__));
  
 $scporder = new SCPO_Engine();
 
-class SCPO_Engine {
+class SCPO_Engine
+{
 
-    function __construct() {
+    public function __construct()
+    {
         if (!get_option('scporder_install'))
             $this->scporder_install();
 
@@ -43,7 +45,8 @@ class SCPO_Engine {
         add_filter('get_terms', [$this, 'scporder_get_object_terms'], 10, 3);
     }
 
-    function scporder_install() {
+    function scporder_install()
+    {
         global $wpdb;
         $result = $wpdb->query("DESCRIBE $wpdb->terms `term_order`");
         if (!$result) {
@@ -53,15 +56,18 @@ class SCPO_Engine {
         update_option('scporder_install', 1);
     }
 
-    function admin_menu() {
+    function admin_menu()
+    {
         add_options_page(__('SCPOrder', 'scporder'), __('SCPOrder', 'scporder'), 'manage_options', 'scporder-settings', [$this, 'admin_page']);
     }
 
-    function admin_page() {
+    function admin_page()
+    {
         require SCPORDER_DIR . 'settings.php';
     }
 
-    function _check_load_script_css() {
+    function _check_load_script_css()
+    {
         $active = false;
 
         $objects = $this->get_scporder_options_objects();
@@ -91,7 +97,8 @@ class SCPO_Engine {
         return $active;
     }
 
-    function load_script_css() {
+    function load_script_css()
+    {
         if ($this->_check_load_script_css()) {
             wp_enqueue_script('jquery');
             wp_enqueue_script('jquery-ui-sortable');
@@ -101,7 +108,8 @@ class SCPO_Engine {
         }
     }
 
-    function refresh() {
+    function refresh()
+    {
         global $wpdb;
         $objects = $this->get_scporder_options_objects();
         $tags = $this->get_scporder_options_tags();
@@ -153,7 +161,8 @@ class SCPO_Engine {
         }
     }
 
-    function update_menu_order() {
+    function update_menu_order()
+    {
         global $wpdb;
 
         parse_str($_POST['order'], $data);
@@ -185,7 +194,8 @@ class SCPO_Engine {
         }
     }
 
-    function update_menu_order_tags() {
+    function update_menu_order_tags()
+    {
         global $wpdb;
 
         parse_str($_POST['order'], $data);
@@ -216,7 +226,8 @@ class SCPO_Engine {
         }
     }
 
-    function update_options() {
+    function update_options()
+    {
         global $wpdb;
 
         if (!isset($_POST['scporder_submit']))
@@ -291,7 +302,8 @@ class SCPO_Engine {
         wp_redirect('admin.php?page=scporder-settings&msg=update');
     }
 
-    function scporder_previous_post_where($where) {
+    function scporder_previous_post_where($where)
+    {
         global $post;
 
         $objects = $this->get_scporder_options_objects();
@@ -305,7 +317,8 @@ class SCPO_Engine {
         return $where;
     }
 
-    function scporder_previous_post_sort($orderby) {
+    function scporder_previous_post_sort($orderby)
+    {
         global $post;
 
         $objects = $this->get_scporder_options_objects();
@@ -318,7 +331,8 @@ class SCPO_Engine {
         return $orderby;
     }
 
-    function scporder_next_post_where($where) {
+    function scporder_next_post_where($where)
+    {
         global $post;
 
         $objects = $this->get_scporder_options_objects();
@@ -332,7 +346,8 @@ class SCPO_Engine {
         return $where;
     }
 
-    function scporder_next_post_sort($orderby) {
+    function scporder_next_post_sort($orderby)
+    {
         global $post;
 
         $objects = $this->get_scporder_options_objects();
@@ -345,7 +360,8 @@ class SCPO_Engine {
         return $orderby;
     }
 
-    function scporder_pre_get_posts($wp_query) {
+    function scporder_pre_get_posts($wp_query)
+    {
         $objects = $this->get_scporder_options_objects();
         if (empty($objects))
             return false;
@@ -390,7 +406,8 @@ class SCPO_Engine {
         }
     }
 
-    function scporder_get_terms_orderby($orderby, $args) {
+    function scporder_get_terms_orderby($orderby, $args)
+    {
         if (is_admin())
             return $orderby;
 
@@ -407,7 +424,8 @@ class SCPO_Engine {
         return $orderby;
     }
 
-    function scporder_get_object_terms($terms) {
+    function scporder_get_object_terms($terms)
+    {
         $tags = $this->get_scporder_options_tags();
 
         if (is_admin() && isset($_GET['orderby']))
@@ -427,19 +445,20 @@ class SCPO_Engine {
         return $terms;
     }
 
-    function taxcmp($a, $b) {
-        if ($a->term_order == $b->term_order)
-            return 0;
-        return ( $a->term_order < $b->term_order ) ? -1 : 1;
+    function taxcmp($a, $b)
+    {
+        return $a->term_order <=> $b->term_order;
     }
 
-    function get_scporder_options_objects() {
+    function get_scporder_options_objects()
+    {
         $scporder_options = get_option('scporder_options') ? get_option('scporder_options') : [];
         $objects = isset($scporder_options['objects']) && is_array($scporder_options['objects']) ? $scporder_options['objects'] : [];
         return $objects;
     }
 
-    function get_scporder_options_tags() {
+    function get_scporder_options_tags()
+    {
         $scporder_options = get_option('scporder_options') ? get_option('scporder_options') : [];
         $tags = isset($scporder_options['tags']) && is_array($scporder_options['tags']) ? $scporder_options['tags'] : [];
         return $tags;
@@ -452,7 +471,8 @@ class SCPO_Engine {
  */
 register_uninstall_hook(__FILE__, 'scporder_uninstall');
 
-function scporder_uninstall() {
+function scporder_uninstall()
+{
     global $wpdb;
     if (function_exists('is_multisite') && is_multisite()) {
         $curr_blog = $wpdb->blogid;
@@ -467,7 +487,8 @@ function scporder_uninstall() {
     }
 }
 
-function scporder_uninstall_db() {
+function scporder_uninstall_db()
+{
     global $wpdb;
     $result = $wpdb->query("DESCRIBE $wpdb->terms `term_order`");
     if ($result) {
