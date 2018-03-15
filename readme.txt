@@ -50,7 +50,7 @@ An answer to that question.
 
 = Version 2.2 (02-07-2014) =
 * Fixed bug: Custom Query which uses 'order' or 'orderby' parameters is preferred
-* It does not depend on the designation manner of arguments( Parameters ). ( $args = 'orderby=&order=' or $args = array( 'orderby' => '', 'order' => '' ) )
+* It does not depend on the designation manner of arguments( Parameters ). ( $args = 'orderby=&order=' or $args = ['orderby' => '', 'order' => ''] )
 * Previous Versions Issues were Improved.
 * Removed Taxonomy Sort( Will add in next Version :) )
 

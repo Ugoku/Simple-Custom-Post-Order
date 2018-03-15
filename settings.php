@@ -1,11 +1,10 @@
 <?php
 $scporder_options = get_option('scporder_options');
-$scporder_objects = isset($scporder_options['objects']) ? $scporder_options['objects'] : array();
-$scporder_tags = isset($scporder_options['tags']) ? $scporder_options['tags'] : array();
+$scporder_objects = isset($scporder_options['objects']) ? $scporder_options['objects'] : [];
+$scporder_tags = isset($scporder_options['tags']) ? $scporder_options['tags'] : [];
 ?>
 
 <div class="wrap">
-    <?php screen_icon('plugins'); ?>
     <h2><?php _e('Simple Custom Post Order Settings', 'scporder'); ?></h2>
     <?php if (isset($_GET['msg'])) : ?>
         <div id="message" class="updated below-h2">
@@ -28,15 +27,15 @@ $scporder_tags = isset($scporder_options['tags']) ? $scporder_options['tags'] : 
                         <td>
                             <label><input type="checkbox" id="scporder_allcheck_objects"> <?php _e('Check All', 'scporder') ?></label><br>
                             <?php
-                            $post_types = get_post_types(array(
+                            $post_types = get_post_types([
                                 'show_ui' => true,
                                 'show_in_menu' => true,
-                                    ), 'objects');
+                            ], 'objects');
 
                             foreach ($post_types as $post_type) {
                                 if ($post_type->name == 'attachment')
                                     continue;
-                                ?>
+                            ?>
                                 <label><input type="checkbox" name="objects[]" value="<?php echo $post_type->name; ?>" <?php
                                     if (isset($scporder_objects) && is_array($scporder_objects)) {
                                         if (in_array($post_type->name, $scporder_objects)) {
@@ -44,9 +43,9 @@ $scporder_tags = isset($scporder_options['tags']) ? $scporder_options['tags'] : 
                                         }
                                     }
                                     ?>>&nbsp;<?php echo $post_type->label; ?></label><br>
-                                    <?php
-                                }
-                                ?>
+                            <?php
+                            }
+                            ?>
                         </td>
                     </tr>
                 </tbody>
@@ -63,14 +62,14 @@ $scporder_tags = isset($scporder_options['tags']) ? $scporder_options['tags'] : 
                         <td>
                             <label><input type="checkbox" id="scporder_allcheck_tags"> <?php _e('Check All', 'scporder') ?></label><br>
                             <?php
-                            $taxonomies = get_taxonomies(array(
+                            $taxonomies = get_taxonomies([
                                 'show_ui' => true,
-                                    ), 'objects');
+                            ], 'objects');
 
                             foreach ($taxonomies as $taxonomy) {
                                 if ($taxonomy->name == 'post_format')
                                     continue;
-                                ?>
+                            ?>
                                 <label><input type="checkbox" name="tags[]" value="<?php echo $taxonomy->name; ?>" <?php
                                     if (isset($scporder_tags) && is_array($scporder_tags)) {
                                         if (in_array($taxonomy->name, $scporder_tags)) {
@@ -78,9 +77,9 @@ $scporder_tags = isset($scporder_options['tags']) ? $scporder_options['tags'] : 
                                         }
                                     }
                                     ?>>&nbsp;<?php echo $taxonomy->label ?></label><br>
-                                    <?php
-                                }
-                                ?>
+                            <?php
+                            }
+                            ?>
                         </td>
                     </tr>
                 </tbody>
@@ -92,30 +91,18 @@ $scporder_tags = isset($scporder_options['tags']) ? $scporder_options['tags'] : 
         </p>
 
     </form>
-    <h3>Like this simple plugin?</h3>
-    <p>Make sure to <a href="https://wordpress.org/support/plugin/simple-custom-post-order/reviews/?filter=5"><strong>rate it</strong></a> and visit us at <a href="https://colorlib.com/wp/"><strong>Colorlib.com</strong></a></p>
-
-
 </div>
 
 <script>
     (function ($) {
-
-        $("#scporder_allcheck_objects").on('click', function () {
-            var items = $("#scporder_select_objects input");
-            if ($(this).is(':checked'))
-                $(items).prop('checked', true);
-            else
-                $(items).prop('checked', false);
+        $('#scporder_allcheck_objects').on('click', function() {
+            var items = $('#scporder_select_objects input');
+            $(items).prop('checked', $(this).is(':checked'));
         });
 
-        $("#scporder_allcheck_tags").on('click', function () {
-            var items = $("#scporder_select_tags input");
-            if ($(this).is(':checked'))
-                $(items).prop('checked', true);
-            else
-                $(items).prop('checked', false);
+        $('#scporder_allcheck_tags').on('click', function() {
+            var items = $('#scporder_select_tags input');
+            $(items).prop('checked', $(this).is(':checked'));
         });
-
-    })(jQuery)
+    })(jQuery);
 </script>
